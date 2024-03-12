@@ -26,3 +26,4 @@ doc/api/
 .vscode/settings.json
 scrolling_demo/.vscode/launch.json
 scrolling_demo/.vscode/settings.json
+.DS_Store
