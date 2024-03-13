@@ -1,6 +1,12 @@
 import { useState } from 'react';
 
-import { Heading, InputField, Button } from '../widgets/ProductsFormWidgets';
+import GenerateUniqueId from '../helpers/GenerateUniqueId';
+
+import {
+	FormHeading,
+	FormInputField,
+	FormButton,
+} from '../widgets/FormWidgets';
 
 export default function ProductsForm({
 	handleClose,
@@ -9,10 +15,6 @@ export default function ProductsForm({
 	isAddForm,
 	existingProducts,
 }) {
-	function generateUniqueId() {
-		return Date.now().toString(36) + Math.random().toString(3);
-	}
-
 	const [name, setName] = useState(initialData.name || '');
 	const [category, setCategory] = useState(initialData.category || '');
 	const [price, setPrice] = useState(
@@ -21,9 +23,7 @@ export default function ProductsForm({
 	const [stockQuantity, setStockQuantity] = useState(
 		initialData.stockQuantity ? initialData.stockQuantity.toString() : ''
 	);
-	const [id, setId] = useState(
-		initialData.id || generateUniqueId().toString()
-	);
+	const [id, setId] = useState(initialData.id || '');
 
 	function handleFormSubmit(e) {
 		e.preventDefault();
@@ -53,8 +53,9 @@ export default function ProductsForm({
 			category,
 			price: parseFloat(price),
 			stockQuantity: parseInt(stockQuantity),
-			id,
+			id: isAddForm ? GenerateUniqueId() : id,
 		});
+
 		if (isAddForm) {
 			setName('');
 			setCategory('');
@@ -75,11 +76,11 @@ export default function ProductsForm({
 				onSubmit={handleFormSubmit}
 				className='max-w-sm mx-auto mt-6 '
 			>
-				<Heading
+				<FormHeading
 					type={isAddForm ? 'add' : 'edit'}
 					productName={initialData.name}
 				/>
-				<InputField
+				<FormInputField
 					label='Name'
 					id='name'
 					value={name}
@@ -87,7 +88,7 @@ export default function ProductsForm({
 					type='text'
 					maxLength={30}
 				/>
-				<InputField
+				<FormInputField
 					label='Category'
 					id='category'
 					value={category}
@@ -95,7 +96,7 @@ export default function ProductsForm({
 					type='text'
 					maxLength={30}
 				/>
-				<InputField
+				<FormInputField
 					label='Price'
 					id='price'
 					value={price}
@@ -103,7 +104,7 @@ export default function ProductsForm({
 					type='text'
 					min={0}
 				/>
-				<InputField
+				<FormInputField
 					label='Stock Quantity'
 					id='stockQuantity'
 					value={stockQuantity}
@@ -112,15 +113,15 @@ export default function ProductsForm({
 					min={0}
 				/>
 				<div className='flex justify-between'>
-					<Button type='submit'>
+					<FormButton type='submit'>
 						{isAddForm ? 'Add' : 'Update'}
-					</Button>
-					<Button
+					</FormButton>
+					<FormButton
 						type='button'
 						onClick={handleClose}
 					>
 						Cancel
-					</Button>
+					</FormButton>
 				</div>
 			</form>
 		</div>

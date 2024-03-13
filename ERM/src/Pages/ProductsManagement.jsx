@@ -2,11 +2,11 @@ import { useState } from 'react';
 
 import { initialProducts as initialProductsData } from '../assets/Data';
 
-import Header from '../components/Header';
 import ProductsForm from '../components/ProductsForms';
 import ProductsTable from '../components/ProductsTable';
 
-import { IconButton, ProductsTD } from '../widgets/ProductsTableWidgets';
+import { IconButton, TD } from '../widgets/TableWidgets';
+import { Header } from '../widgets/GeneralWidgets';
 
 let sortedOrders = { name: 1, category: 1, price: 1, stockQuantity: 1 };
 
@@ -30,30 +30,34 @@ export default function ProductsManagement() {
 
 	function sortTable(sortCriteria) {
 		const sorted = [...initialProducts];
-		console.log(sortedOrders);
 
-		if (sortCriteria === 'Name') {
-			sorted.sort(
-				(a, b) => sortedOrders.name * a.name.localeCompare(b.name)
-			);
-			sortedOrders.name = sortedOrders.name === 1 ? -1 : 1;
-		} else if (sortCriteria === 'Category') {
-			sorted.sort(
-				(a, b) =>
-					sortedOrders.category * a.category.localeCompare(b.category)
-			);
-			sortedOrders.category = sortedOrders.category === 1 ? -1 : 1;
-		} else if (sortCriteria === 'Price') {
-			sorted.sort((a, b) => sortedOrders.price * (a.price - b.price));
-			sortedOrders.price = sortedOrders.price === 1 ? -1 : 1;
-		} else {
-			sorted.sort(
-				(a, b) =>
-					sortedOrders.stockQuantity *
-					(a.stockQuantity - b.stockQuantity)
-			);
-			sortedOrders.stockQuantity =
-				sortedOrders.stockQuantity === 1 ? -1 : 1;
+		switch (sortCriteria) {
+			case 'Name':
+				sorted.sort(
+					(a, b) => sortedOrders.name * a.name.localeCompare(b.name)
+				);
+				sortedOrders.name *= -1;
+				break;
+			case 'Category':
+				sorted.sort(
+					(a, b) =>
+						sortedOrders.category *
+						a.category.localeCompare(b.category)
+				);
+				sortedOrders.category *= -1;
+				break;
+			case 'Price':
+				sorted.sort((a, b) => sortedOrders.price * (a.price - b.price));
+				sortedOrders.price *= -1;
+				break;
+			default:
+				sorted.sort(
+					(a, b) =>
+						sortedOrders.stockQuantity *
+						(a.stockQuantity - b.stockQuantity)
+				);
+				sortedOrders.stockQuantity *= -1;
+				break;
 		}
 
 		setInitialProducts(sorted);
@@ -78,21 +82,15 @@ export default function ProductsManagement() {
 
 	function editProduct(updatedProduct) {
 		setSearchTerm('');
-		const updatedProducts = initialProducts.map((product) => {
-			if (product.id === updatedProduct.id) {
-				return {
-					...updatedProduct,
-				};
-			}
-			return product;
-		});
+		const updatedProducts = initialProducts.map((product) =>
+			product.id === updatedProduct.id ? updatedProduct : product
+		);
 		setInitialProducts(updatedProducts);
 		setFilteredProducts(updatedProducts);
 		setEditProductStarted(false);
 	}
 
 	function handleClose() {
-		setFilteredProducts(filteredProducts);
 		setAddProductStarted(false);
 		setEditProductStarted(false);
 	}
@@ -112,39 +110,38 @@ export default function ProductsManagement() {
 	}
 
 	const productsTable = filteredProducts.map((product, index) => (
-		<tr key={product.name}>
-			<ProductsTD>{index + 1}</ProductsTD>
-			<ProductsTD>{product.name}</ProductsTD>
-			<ProductsTD>{product.category}</ProductsTD>
-			<ProductsTD>{product.price}</ProductsTD>
-			<ProductsTD>{product.stockQuantity}</ProductsTD>
-			<ProductsTD>
+		<tr key={product.id}>
+			<TD>{index + 1}</TD>
+			<TD>{product.name}</TD>
+			<TD>{product.category}</TD>
+			<TD>{product.price}</TD>
+			<TD>{product.stockQuantity}</TD>
+			<TD>
 				<div className='flex justify-evenly'>
 					<IconButton
 						onClick={() => handleEditProduct(product)}
 						type='edit'
 					/>
-
 					<IconButton
 						onClick={() => handleDeleteProduct(product.id)}
 						type='delete'
 					/>
 				</div>
-			</ProductsTD>
+			</TD>
 		</tr>
 	));
 
 	return (
 		<div className='h-screen p-8 flex-row justify-between'>
 			<Header>Products</Header>
-			<div className=' p-2 pr-2 flex justify-between'>
+			<div className='p-2 pr-2 flex justify-between'>
 				<input
 					type='text'
 					placeholder='Search by product name'
 					value={searchTerm}
 					onChange={handleSearch}
 					className='p-2 border border-gray-300 rounded-lg w-10/12'
-					disabled={addProductStarted}
+					disabled={addProductStarted || editProductStarted}
 				/>
 				<button
 					onClick={handleAddProduct}

@@ -1,9 +1,9 @@
-export function Heading({ type, productName }) {
-	let heading;
+export function FormHeading({ type, productName }) {
+	let heading = '';
 	if (type === 'add') {
 		heading = 'New Product';
-	} else if (type === 'edit') {
-		heading = 'Edit ' + productName;
+	} else if (type === 'edit' || type === 'update') {
+		heading = `${type === 'edit' ? 'Edit' : 'Update'} ${productName}`;
 	}
 	return (
 		<h2 className='text-3xl font-semibold mb-4 text-entntblue'>
@@ -12,17 +12,17 @@ export function Heading({ type, productName }) {
 	);
 }
 
-export function Button({ type, onClick, children }) {
-	let css =
+export function FormButton({ type, onClick, children }) {
+	let buttonClass =
 		'text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-24';
 	if (type === 'button') {
-		css += ' bg-gray-400 hover:bg-gray-500';
+		buttonClass += ' bg-gray-400 hover:bg-gray-500';
 	} else if (type === 'submit') {
-		css += ' bg-entntblue hover:bg-blue-600';
+		buttonClass += ' bg-entntblue hover:bg-blue-600';
 	}
 	return (
 		<button
-			className={css}
+			className={buttonClass}
 			onClick={onClick}
 		>
 			{children}
@@ -30,7 +30,7 @@ export function Button({ type, onClick, children }) {
 	);
 }
 
-export function InputField({
+export function FormInputField({
 	label,
 	id,
 	value,
@@ -38,6 +38,7 @@ export function InputField({
 	type,
 	maxLength,
 	min,
+	readOnly,
 }) {
 	return (
 		<div className='mb-4'>
@@ -55,6 +56,7 @@ export function InputField({
 				className='border p-2 w-full bg-stone-300 shadow-inner'
 				maxLength={maxLength}
 				min={min}
+				readOnly={readOnly}
 			/>
 		</div>
 	);
