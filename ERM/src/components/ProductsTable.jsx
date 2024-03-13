@@ -1,4 +1,4 @@
-import { ProductsTH } from '../widgets/ProductsTD';
+import { ProductsTH } from '../widgets/ProductsTableWidgets';
 
 export default function ProductsTable({ handleSort, productsList }) {
 	return (

@@ -1,15 +1,22 @@
-import { ProductsTD } from '../widgets/ProductsTD';
-import { initialProducts } from '../assets/InitialProducts';
-import { MdEdit, MdDeleteForever } from 'react-icons/md';
 import { useState } from 'react';
+
+import { initialProducts as initialProductsData } from '../assets/Data';
+
 import Header from '../components/Header';
+import ProductsForm from '../components/ProductsForms';
 import ProductsTable from '../components/ProductsTable';
+
+import { IconButton, ProductsTD } from '../widgets/ProductsTableWidgets';
 
 let sortedOrders = { name: 1, category: 1, price: 1, stockQuantity: 1 };
 
 export default function ProductsManagement() {
 	const [searchTerm, setSearchTerm] = useState('');
+	const [initialProducts, setInitialProducts] = useState(initialProductsData);
 	const [filteredProducts, setFilteredProducts] = useState(initialProducts);
+	const [addProductStarted, setAddProductStarted] = useState(false);
+	const [editProductStarted, setEditProductStarted] = useState(false);
+	const [currentProduct, setCurrentProduct] = useState(null);
 
 	function handleSearch(event) {
 		setSearchTerm(event.target.value);
@@ -22,7 +29,7 @@ export default function ProductsManagement() {
 	}
 
 	function sortTable(sortCriteria) {
-		const sorted = [...filteredProducts];
+		const sorted = [...initialProducts];
 		console.log(sortedOrders);
 
 		if (sortCriteria === 'Name') {
@@ -49,7 +56,59 @@ export default function ProductsManagement() {
 				sortedOrders.stockQuantity === 1 ? -1 : 1;
 		}
 
+		setInitialProducts(sorted);
 		setFilteredProducts(sorted);
+	}
+
+	function handleAddProduct() {
+		setAddProductStarted(true);
+	}
+
+	function addProduct(newProduct) {
+		setSearchTerm('');
+		setInitialProducts((prevProducts) => [...prevProducts, newProduct]);
+		setFilteredProducts((prevProducts) => [...prevProducts, newProduct]);
+		setAddProductStarted(false);
+	}
+
+	function handleEditProduct(product) {
+		setCurrentProduct(product);
+		setEditProductStarted(true);
+	}
+
+	function editProduct(updatedProduct) {
+		setSearchTerm('');
+		const updatedProducts = initialProducts.map((product) => {
+			if (product.id === updatedProduct.id) {
+				return {
+					...updatedProduct,
+				};
+			}
+			return product;
+		});
+		setInitialProducts(updatedProducts);
+		setFilteredProducts(updatedProducts);
+		setEditProductStarted(false);
+	}
+
+	function handleClose() {
+		setFilteredProducts(filteredProducts);
+		setAddProductStarted(false);
+		setEditProductStarted(false);
+	}
+
+	function handleDeleteProduct(id) {
+		const shouldDelete = window.confirm(
+			'Are you sure you want to delete this product?'
+		);
+		if (shouldDelete) {
+			const updatedProducts = initialProducts.filter(
+				(product) => product.id !== id
+			);
+			setInitialProducts(updatedProducts);
+			setFilteredProducts(updatedProducts);
+		}
+		setSearchTerm('');
 	}
 
 	const productsTable = filteredProducts.map((product, index) => (
@@ -61,12 +120,15 @@ export default function ProductsManagement() {
 			<ProductsTD>{product.stockQuantity}</ProductsTD>
 			<ProductsTD>
 				<div className='flex justify-evenly'>
-					<button>
-						<MdEdit className='text-lg text-entntblue hover:text-2xl' />
-					</button>
-					<button className=' text-red-500 text-lg hover:text-2xl'>
-						<MdDeleteForever />
-					</button>
+					<IconButton
+						onClick={() => handleEditProduct(product)}
+						type='edit'
+					/>
+
+					<IconButton
+						onClick={() => handleDeleteProduct(product.id)}
+						type='delete'
+					/>
 				</div>
 			</ProductsTD>
 		</tr>
@@ -82,15 +144,43 @@ export default function ProductsManagement() {
 					value={searchTerm}
 					onChange={handleSearch}
 					className='p-2 border border-gray-300 rounded-lg w-10/12'
+					disabled={addProductStarted}
 				/>
-				<button className='p-2 bg-green-600 text-lg rounded-lg text-stone-50 hover:bg-green-400 hover:text-bold hover:text-white'>
+				<button
+					onClick={handleAddProduct}
+					className='p-2 bg-green-600 text-lg rounded-lg text-stone-50 hover:bg-green-400 hover:text-bold hover:text-white'
+				>
 					Add Product
 				</button>
 			</div>
-			<ProductsTable
-				handleSort={sortTable}
-				productsList={productsTable}
-			/>
+			{addProductStarted && (
+				<ProductsForm
+					handleClose={handleClose}
+					handleSubmit={addProduct}
+					initialData={{
+						name: '',
+						category: '',
+						price: '',
+						stockQuantity: '',
+					}}
+					existingProducts={initialProducts}
+					isAddForm={true}
+				/>
+			)}
+			{editProductStarted && (
+				<ProductsForm
+					handleClose={handleClose}
+					handleSubmit={editProduct}
+					initialData={currentProduct}
+					isAddForm={false}
+				/>
+			)}
+			{!addProductStarted && !editProductStarted && (
+				<ProductsTable
+					handleSort={sortTable}
+					productsList={productsTable}
+				/>
+			)}
 		</div>
 	);
 }
