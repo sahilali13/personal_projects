@@ -76,7 +76,7 @@ export default function OrderSummary({ isOpen, order, onClose }) {
 								return (
 									<li key={item.productId}>
 										{getProductName(item.productId)} -
-										Quantity: {item.quantity}, Price:{' '}
+										Quantity: {item.quantity}, Price: ₹
 										{item.price.toFixed(2)}
 									</li>
 								);

@@ -81,7 +81,7 @@ export default function CustomerMetrics({ showGraph }) {
 						</h2>
 						{topThreeCUSTOMERS.map((customer, index) => (
 							<p key={index}>
-								{getCustomerName(customer[0], index)}:{' '}
+								{getCustomerName(customer[0], index)}:{' ₹'}
 								{customer[1].toFixed(0)}
 							</p>
 						))}

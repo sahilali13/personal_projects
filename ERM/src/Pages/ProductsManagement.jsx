@@ -113,7 +113,7 @@ export default function ProductsManagement() {
 			<TD>{index + 1}</TD>
 			<TD>{product.name}</TD>
 			<TD>{product.category}</TD>
-			<TD>{product.price}</TD>
+			<TD>₹{product.price}</TD>
 			<TD>{product.stockQuantity}</TD>
 			<TD>
 				<div className='flex justify-evenly'>

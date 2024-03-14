@@ -4,6 +4,7 @@ import { Header } from '../widgets/GeneralWidgets';
 
 export default function Navigation() {
 	const location = useLocation();
+	const tabCss = 'text-gray-50 hover:text-gray-200 font-medium text-xl';
 	return (
 		<nav className='flex justify-between items-center py-4 px-8 bg-entntblue rounded-bl-3xl rounded-br-3xl'>
 			{location.pathname == '/' && <Header heading='Dashboard' />}
@@ -18,7 +19,7 @@ export default function Navigation() {
 					<li className='ml-4'>
 						<Link
 							to='/'
-							className='text-gray-50 hover:text-gray-200 font-medium'
+							className={tabCss}
 						>
 							Dashboard
 						</Link>
@@ -28,7 +29,7 @@ export default function Navigation() {
 					<li className='ml-4'>
 						<Link
 							to='/products-management'
-							className='text-gray-50 hover:text-gray-200 font-medium'
+							className={tabCss}
 						>
 							Products
 						</Link>
@@ -38,7 +39,7 @@ export default function Navigation() {
 					<li className='ml-4'>
 						<Link
 							to='/orders-management'
-							className='text-gray-50 hover:text-gray-200 font-medium'
+							className={tabCss}
 						>
 							Orders
 						</Link>

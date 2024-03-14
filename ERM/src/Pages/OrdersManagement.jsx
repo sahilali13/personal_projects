@@ -137,6 +137,14 @@ export default function OrdersManagement() {
 		</tr>
 	));
 
+	const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+	const updateScreenWidth = () => {
+		setScreenWidth(window.innerWidth);
+	};
+
+	window.addEventListener('resize', updateScreenWidth);
+
 	return (
 		<div className='h-[90vh] p-2  overscroll-none  w-[99vw] m-auto'>
 			<div className=' p-2 flex justify-between'>
@@ -148,16 +156,22 @@ export default function OrdersManagement() {
 					className='p-2 border border-gray-300 rounded-lg w-10/12'
 					disabled={inCalendarView || editOrderStarted}
 				/>
-				<FaList
-					className={`mt-3 text-xl text-entntblue ${
-						!inCalendarView ? '' : 'hidden'
-					}`}
-				/>
-				<FaCalendarAlt
-					className={`mt-3 text-xl text-entntblue ${
-						inCalendarView ? '' : 'hidden'
-					}`}
-				/>
+
+				<>
+					<FaList
+						className={`mt-3 text-xl text-entntblue ${
+							!inCalendarView && screenWidth > 1168
+								? ''
+								: 'hidden'
+						}`}
+					/>
+					<FaCalendarAlt
+						className={`mt-3 text-xl text-entntblue ${
+							inCalendarView && screenWidth > 1168 ? '' : 'hidden'
+						}`}
+					/>
+				</>
+
 				<button
 					onClick={toggleView}
 					className='bg-entntblue p-2 rounded-lg text-lg text-slate-200 hover:bg-blue-600 hover:font-semibold w-40'

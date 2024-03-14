@@ -64,7 +64,10 @@ export function OrderDetailRow({ label, value }) {
 			<td className='pr-2'>
 				<strong>{label}</strong>
 			</td>
-			<td>{value}</td>
+			<td>
+				{label === 'Total Price' && '₹'}
+				{value}
+			</td>
 		</tr>
 	);
 }

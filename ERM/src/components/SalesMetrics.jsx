@@ -174,7 +174,7 @@ function renderMetrics(
 		<div className='grid grid-cols-2 gap-4'>
 			<Metric
 				label='Total Revenue'
-				value={`$${totalRevenue.toFixed(2)}`}
+				value={`₹${totalRevenue.toFixed(2)}`}
 			/>
 			<Metric
 				label='Number of Orders'
@@ -182,7 +182,7 @@ function renderMetrics(
 			/>
 			<Metric
 				label='Average Order Value'
-				value={`$${averageOrderValue.toFixed(2)}`}
+				value={`₹${averageOrderValue.toFixed(2)}`}
 			/>
 			<Metric
 				label='Total Units Sold'
