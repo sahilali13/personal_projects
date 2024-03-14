@@ -2,17 +2,14 @@ import { useState } from 'react';
 
 import { FaList, FaCalendarAlt } from 'react-icons/fa';
 
-import { initialOrders as initialOrdersData } from '../assets/Data';
-
+import { INITIAL_ORDERS as initialOrdersData } from '../assets/Data';
 import OrdersTable from '../components/OrdersTable';
 import OrdersForm from '../components/OrdersForm';
 import OrderSummary from '../components/OrderSummary';
 import CalendarView from '../components/CalendarView';
 
-import DateFromTimestamp from '../helpers/DateFromTimestamp';
-
-import { Header } from '../widgets/GeneralWidgets';
 import { IconButton, TD } from '../widgets/TableWidgets';
+import DateFromTimestamp from '../helpers/DateFromTimestamp';
 
 let sortedOrders = { id: 1, orderDate: 1, estimatedDeliveryDate: 1, status: 1 };
 
@@ -119,7 +116,7 @@ export default function OrdersManagement() {
 			<TD>{index + 1}</TD>
 			<TD>{order.id}</TD>
 			<TD>{DateFromTimestamp(order.orderDate)}</TD>
-			<TD>{DateFromTimestamp(order.estimatedDeliveryDate)}</TD>
+			<TD>{DateFromTimestamp(order.deliveryDate)}</TD>
 			<TD>{order.status}</TD>
 			<TD>
 				<div className='flex justify-evenly'>
@@ -141,8 +138,7 @@ export default function OrdersManagement() {
 	));
 
 	return (
-		<div className='h-screen p-8 flex-row justify-between'>
-			<Header>Orders</Header>
+		<div className='h-[90vh] p-2  overscroll-none  w-[99vw] m-auto'>
 			<div className=' p-2 flex justify-between'>
 				<input
 					type='text'

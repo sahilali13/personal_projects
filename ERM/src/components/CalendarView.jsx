@@ -13,7 +13,7 @@ export default function CalendarView({ orders }) {
 	const localizer = momentLocalizer(moment);
 
 	const maxDeliveryDate = Math.max(
-		...orders.map((order) => order.estimatedDeliveryDate)
+		...orders.map((order) => order.deliveryDate)
 	);
 
 	const startDate = new Date(maxDeliveryDate * 1000);
@@ -26,8 +26,8 @@ export default function CalendarView({ orders }) {
 					localizer={localizer}
 					events={orders.map((order) => ({
 						id: order.id,
-						start: new Date(order.estimatedDeliveryDate * 1000), // Convert timestamp to Date object
-						end: new Date(order.estimatedDeliveryDate * 1000), // Same as start for simplicity
+						start: new Date(order.deliveryDate * 1000), // Convert timestamp to Date object
+						end: new Date(order.deliveryDate * 1000), // Same as start for simplicity
 						title: `Order ${order.id}`,
 					}))}
 					onSelectEvent={(event) => handleDateSelect(event.start)}
@@ -51,7 +51,7 @@ export default function CalendarView({ orders }) {
 							{orders
 								.filter((order) => {
 									const orderDate = new Date(
-										order.estimatedDeliveryDate * 1000
+										order.deliveryDate * 1000
 									);
 									return (
 										orderDate.toDateString() ===

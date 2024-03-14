@@ -1,3 +1,5 @@
+import { CUSTOMERS, INITIAL_PRODUCTS } from '../assets/Data';
+
 import DateFromTimestamp from '../helpers/DateFromTimestamp';
 
 import { OrderDetailRow } from '../widgets/TableWidgets';
@@ -12,6 +14,18 @@ export default function OrderSummary({ isOpen, order, onClose }) {
 				value={value}
 			/>
 		);
+	}
+
+	function getCustomerName(customerID) {
+		const customer = CUSTOMERS.find(
+			(cust) => cust.customerID === customerID
+		);
+		return customer ? customer.customerName : 'Unknown Customer';
+	}
+
+	function getProductName(productID) {
+		const product = INITIAL_PRODUCTS.find((prod) => prod.id === productID);
+		return product ? product.name : 'Unknown Product';
 	}
 
 	return (
@@ -31,7 +45,7 @@ export default function OrderSummary({ isOpen, order, onClose }) {
 								{renderOrderDetailRow('Order ID', order.id)}
 								{renderOrderDetailRow(
 									'Customer Name',
-									order.customerName
+									getCustomerName(order.customerID)
 								)}
 								{renderOrderDetailRow(
 									'Order Date',
@@ -43,10 +57,8 @@ export default function OrderSummary({ isOpen, order, onClose }) {
 									order.totalPrice.toFixed(2)
 								)}
 								{renderOrderDetailRow(
-									'Estimated Delivery Date',
-									DateFromTimestamp(
-										order.estimatedDeliveryDate
-									)
+									'Delivery Date',
+									DateFromTimestamp(order.deliveryDate)
 								)}
 								{renderOrderDetailRow(
 									'Payment Method',
@@ -60,12 +72,15 @@ export default function OrderSummary({ isOpen, order, onClose }) {
 						</table>
 						<h3 className='text-lg font-bold mt-4'>Items:</h3>
 						<ul>
-							{order.items.map((item) => (
-								<li key={item.id}>
-									{item.name} - Quantity: {item.quantity},
-									Price: {item.price.toFixed(2)}
-								</li>
-							))}
+							{order.items.map((item) => {
+								return (
+									<li key={item.productId}>
+										{getProductName(item.productId)} -
+										Quantity: {item.quantity}, Price:{' '}
+										{item.price.toFixed(2)}
+									</li>
+								);
+							})}
 						</ul>
 						<button
 							onClick={onClose}

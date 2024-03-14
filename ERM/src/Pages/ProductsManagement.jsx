@@ -1,12 +1,11 @@
 import { useState } from 'react';
 
-import { initialProducts as initialProductsData } from '../assets/Data';
+import { INITIAL_PRODUCTS as initialProductsData } from '../assets/Data';
 
 import ProductsForm from '../components/ProductsForms';
 import ProductsTable from '../components/ProductsTable';
 
 import { IconButton, TD } from '../widgets/TableWidgets';
-import { Header } from '../widgets/GeneralWidgets';
 
 let sortedOrders = { name: 1, category: 1, price: 1, stockQuantity: 1 };
 
@@ -132,8 +131,7 @@ export default function ProductsManagement() {
 	));
 
 	return (
-		<div className='h-screen p-8 flex-row justify-between'>
-			<Header>Products</Header>
+		<div className='h-[90vh] p-2 w-[99vw] m-auto'>
 			<div className='p-2 pr-2 flex justify-between'>
 				<input
 					type='text'
