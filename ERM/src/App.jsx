@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import ProductsManagement from './Pages/ProductsManagement';
 import OrdersManagement from './Pages/OrdersManagement';
 import Navigation from './components/Navigation';
@@ -6,7 +6,7 @@ import Dashboard from './Pages/Dashboard';
 
 function App() {
 	return (
-		<BrowserRouter>
+		<HashRouter>
 			<Navigation />
 			<Routes>
 				<Route
@@ -22,7 +22,7 @@ function App() {
 					element={<OrdersManagement />}
 				/>
 			</Routes>
-		</BrowserRouter>
+		</HashRouter>
 	);
 }
 
